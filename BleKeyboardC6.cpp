@@ -1,4 +1,4 @@
-#include "BleKeyboard.h"
+#include "BleKeyboardC6.h"
 
 #if defined(USE_NIMBLE)
 #include <NimBLEDevice.h>
@@ -103,7 +103,7 @@ BleKeyboard::BleKeyboard(std::string deviceName, std::string deviceManufacturer,
 
 void BleKeyboard::begin(void)
 {
-  BLEDevice::init(deviceName);
+  BLEDevice::init(deviceName.c_str());
   BLEServer* pServer = BLEDevice::createServer();
   pServer->setCallbacks(this);
 
@@ -114,7 +114,7 @@ void BleKeyboard::begin(void)
 
   outputKeyboard->setCallbacks(this);
 
-  hid->manufacturer()->setValue(deviceManufacturer);
+  hid->manufacturer()->setValue(deviceManufacturer.c_str());
 
   hid->pnp(0x02, vid, pid, version);
   hid->hidInfo(0x00, 0x01);
@@ -127,7 +127,7 @@ void BleKeyboard::begin(void)
 #else
 
   BLESecurity* pSecurity = new BLESecurity();
-  pSecurity->setAuthenticationMode(ESP_LE_AUTH_REQ_SC_MITM_BOND);
+  pSecurity->setAuthenticationMode(ESP_LE_AUTH_BOND);
 
 #endif // USE_NIMBLE
 
